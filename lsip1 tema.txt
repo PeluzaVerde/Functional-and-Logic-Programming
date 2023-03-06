@@ -1,0 +1,132 @@
+;twice(l1,l2,l3,...lm , n)
+; false, m=0 (l is empty)
+;  l1,l1,l2...lm, n=1
+; l1 U twice(l2,l3...lm, n-1), otherwise
+
+
+; twice(list:i,el:i)
+(defun twice (l n)
+    (cond
+        ((null l) nil)
+        ((= n 1) (cons (car l) l))
+        (T (cons (car l) (twice (cdr l) (- n 1))))
+    )
+)
+
+(print (twice '(10 20 30 40 50) 3))
+
+
+
+;myappnd(l1 l2 l3... ln, e)=
+; e, n=0
+; l1 U (myappnd(l2 l3 l4...ln) e)
+;
+;myappnd(list:i, el:i)
+;
+
+
+(defun myappnd(l e)
+    (if (null l) 
+    e
+    (cons (car l) (myappnd (cdr l) e) )
+    )
+)
+
+
+;associ(l1 l2 ... ln, k1 k2... km)=
+; nil, n=0 and m=0
+;myappnd(list( nil U k1) U associ( l, k2 k3 ...km)), n=0  
+;myappnd(list( l1 U nil) U associ( l1 l2...ln, k)), m=0
+;myappnd(list( l1 U k1) U associ( l1 l2...ln, k2 k3 ...km)), otherwise
+;
+
+;associ(list:i, list:i)
+(defun associ(l k)
+(cond
+    ((and (null l) (null k)) nil )
+    ((null l) (myappnd (list (cons nil (car k))) (associ l (cdr k) )))
+    ((null k) (myappnd ( list ( cons (car l) nil)) (associ (cdr l) k )))
+    (T (myappnd(list(cons (car l) (car k) )) (associ (cdr l) (cdr k))))
+    )
+)
+
+(print (assoc  '(A B c D) '(E Z Q R T I) )) 
+
+
+;count-sublists(l1 l2 ...ln)=
+;
+; 1+ count-sublists(l2,l3..ln), l1 is list
+; 0 otherwise
+;
+;count-sublists(list:i)
+
+
+(defun count-sublists (list)
+  (if (listp list)
+      (1+ (loop for el in list
+             sum (count-sublists el)))
+      0))
+
+
+
+
+; numatom(l1,l2,...ln) =
+; 0, l is empty
+; 1 + numatom(l2,l3,..ln) , l1 is numerical atom
+; numatom(l2,l3,..ln), otherwise
+
+;numatom(list:i)
+
+;Write a function to return the number of all numerical atoms in a list at superficial level.
+(defun numatom (l)
+    (cond
+    ((null l) 0)
+    ((numberp (car l)) (+ 1 (numatom (cdr l))))
+    (T (numatom (cdr l)))
+    )
+)
+(print (numatom '(1 2 s 5 (6) fg 5)))
+
+; level ( l1 l2..lm, n, k)
+;
+; 0, l1 = n
+; level(l2,l3..lm, n , k) -1), l1 = 0
+; level(l2,l3..lm, n , 0) +k), l1 = 1 and l2= n
+; level(l2,l3..lm, n , k+1) -1), l1 = 1 and l2 != n
+; level(l2,l3..lm, n , k), l1 = 2
+; level(l2,l3..lm, n , k) + 1 ), otherwise
+
+;level(list:i, el:i, el:i)
+
+
+
+(defun level(l n k)
+    (cond
+    ((eq  (car l) n ) 0)
+    ((eq  (car l) 0) (- (level (cdr l) n k) 1) )
+    ((eq  (car l) 1) ( 
+        cond
+        ((eq (car(cdr l)) n)  (+ k (level (cdr l) n 0)  ))
+        (T (- (level (cdr l) n (+ 1 k)) 1))
+        )
+    )
+        
+    ((eq  (car l) 2)  (level (cdr l) n k))
+    (T (+ 1 (level (cdr l) n k) ))
+    )
+)
+
+
+(print (level  '(A 2 B 0 C 2 D 0 E 0) 'e 0))
+;(print (level  '(A 2 B 1 F 1 G 1 H 0 C 2 D 0 E 0) 'c 0))
+
+
+
+
+(defun Prod(l)
+	(cond
+((numberp l) l)
+((atom l) 1)
+(T(apply '* (mapcar #'Prod l))) 
+	)
+)

@@ -1,0 +1,41 @@
+inverse(C,[],C):-!.
+inverse(C,[H|T],R):-
+    inverse([H|C],T,R).
+
+even([],[]).
+even([H|T],[H|R]):-
+    H mod 2 =:= 0,
+    !,
+    even(T,R).
+even([_|T],R):-
+    even(T,R).
+
+r1([],[],[]).
+r1([H|T],[H|N],P):-
+   H < 0,
+   r1(T,N,P),
+    !.
+   
+r1([H|T],N,[H|P]):-
+   H >= 0,
+   r1(T,N,P),
+    !. 
+
+minaux([MN],MN).  
+minaux([H,K|T],M):-
+    H=<K,
+    minaux([H|T],M).
+minaux([H,K|T],M):-
+    H>K,
+    minaux([K|T],M).
+
+
+min([],[],[],_,_).
+min(L,N,P,MN,MP):-
+    r1(L,N,P),
+     minaux(N,MN),
+     minaux(P,MP).
+
+
+
+

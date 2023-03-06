@@ -1,0 +1,55 @@
+(defun mergel(m n)
+    (cond
+        ( (null m) n)
+        ( (null n) m)
+        ( (= (car m) (car n)) (cons (car m) (mergel(cdr m)(cdr n)))) 
+        ( (< (car m) (car n)) (cons (car m) (mergel(cdr m) n))) 
+        (T (cons (cdr n) (mergel m (cdr n))))
+    )
+    ) 
+
+;removes el from list ( superficial or sumn)
+(defun waamu(l el)
+    (
+     cond
+          ((null l) nil)
+          ((and (atom (car l))(eql (car l) el)) (waamu(cdr l) el))
+          ((atom (car l) ) (cons (car l) (waamu(cdr l) el)))
+          ( T (cons (waamu(car l) el) (waamu(cdr l) el)))
+          
+     )
+    )
+    
+    (print (mergel '(1 2 3 4) '(3 4 8 9 10 11 12 145 1295) ))
+    
+    (print (waamu '(a 1 z 2 3 ( 6 8 3 3 ) 3 3 54 ) 3 ) )
+
+
+;build a list with the position of the minnial el in a liner list 
+
+(defun buildList(l min listPos index)
+    (cond
+        ((null l) listPos)
+        ((< (car l) min) (buildList (cdr l) (car l) (list index) (+ 1 index)))
+        ((= (car l) min) (buildList (cdr l) min (append listPos (list index)) (+ 1 index)))
+        (T (buildList (cdr l) min listPos (+ 1 index)))
+        )
+    )
+
+(defun main(l)
+    (buildList l (car l) nil 1))
+
+(print (main '(1 2 0 5 0 6 0)))
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        s

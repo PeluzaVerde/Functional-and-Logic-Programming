@@ -1,0 +1,59 @@
+paranteza(')').
+paranteza('(').
+
+/*
+check(l1,l2,..ln,c) =
+check(l2,l3,...ln,c+1) , l1='('
+
+check(l2,l3,...ln,c-1) , l1=')' and c>0
+check(list:i,number:i)
+
+
+*/
+check([],0).
+check([H|T],C):-
+    H== '(',
+    NC is C+1,
+    check(T,NC).
+check([H|T],C):-
+    H == ')',
+    C > 0,
+    NC is C-1,
+    check(T,NC).
+
+%sol([],C,C,R).
+%sol([N,I,C,R):-
+%    paranteza(X),
+ %   NI is I+1,
+  %  sol([X|C],NI,C,R).
+
+/*
+ * comb(n,m,c)=
+ * m, c=n
+ * comb(n,paranteza(x)+m,c+1), otherwise
+ * 
+ *  comb(number:i,list:i,number:i,list:o)
+ * */
+comb(N,M,N,M):-!.
+comb(N,M,C,R):-
+    paranteza(X),
+    NC is C+1,
+    comb(N,[X|M],NC,R).
+
+/*
+ * onesol(number:i,list:o)
+ * 
+ * 
+ * */
+onesol(N,R):-
+    comb(N,[],0,R),
+    check(R,0).
+/*
+ * allsol(number:i,list:o)
+ * 
+ * */
+allsol(N,R):-
+   findall(RPartial, onesol(N,RPartial),R).
+
+
+   
